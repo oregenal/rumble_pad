@@ -11,21 +11,21 @@ int main(void)
 	if(SDL_Init(SDL_INIT_JOYSTICK) < 0) {
 		fprintf(stderr, "SDL Error: %s\n", SDL_GetError());
 		return EXIT_FAILURE;
-	} else {
-		printf("SDL GamePad ready to go!\n");
 	}
 
 	SDL_GameController *gamePad1 = NULL;
 
-	if(SDL_NumJoysticks() < 1) {
+	int num_of_joys = SDL_NumJoysticks();
+
+	if(num_of_joys < 1) {
 		fprintf(stderr, "No gamepad connected\n");
 		return EXIT_FAILURE;
 	} else {
-		printf("%d gamepad connected.\n", SDL_NumJoysticks());
 		gamePad1 = SDL_GameControllerOpen(0);
-		//printf("GamepadID: %d.\n", SDL_JoystickInstanceID(gamePad1));
-		if(SDL_GameControllerHasRumble(gamePad1)) {
-			printf("Gamepad has rumble.\n");
+		printf("%s connected.\n", SDL_GameControllerName(gamePad1));
+		if(!SDL_GameControllerHasRumble(gamePad1)) {
+			fprintf(stderr, "Gamepad has no rumble.\n");
+			return EXIT_FAILURE;
 		}
 	}
 
