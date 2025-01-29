@@ -10,6 +10,7 @@ int main(void)
 {
 	if(SDL_Init(SDL_INIT_JOYSTICK) < 0) {
 		fprintf(stderr, "SDL Error: %s\n", SDL_GetError());
+		return EXIT_FAILURE;
 	} else {
 		printf("SDL GamePad ready to go!\n");
 	}
@@ -18,6 +19,7 @@ int main(void)
 
 	if(SDL_NumJoysticks() < 1) {
 		fprintf(stderr, "No gamepad connected\n");
+		return EXIT_FAILURE;
 	} else {
 		printf("%d gamepad connected.\n", SDL_NumJoysticks());
 		gamePad1 = SDL_GameControllerOpen(0);
