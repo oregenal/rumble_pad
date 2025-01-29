@@ -22,9 +22,10 @@ int main(void)
 		return EXIT_FAILURE;
 	} else {
 		gamePad1 = SDL_GameControllerOpen(0);
-		printf("%s connected.\n", SDL_GameControllerName(gamePad1));
+		const char *gamePad1_name = SDL_GameControllerName(gamePad1);
+		printf("%s connected.\n", gamePad1_name);
 		if(!SDL_GameControllerHasRumble(gamePad1)) {
-			fprintf(stderr, "Gamepad has no rumble.\n");
+			fprintf(stderr, "%s has no rumble.\n", gamePad1_name);
 			return EXIT_FAILURE;
 		}
 	}
