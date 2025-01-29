@@ -2,9 +2,9 @@
 
 #include <SDL2/SDL.h>
 
-#define LOW_FREQUENCY_RUMBLE 0x0
-#define HIGH_FREQUENCY_RUMBLE 0xFFFF
-#define DURATION_MS 50
+#define LOW_FREQUENCY_RUMBLE 0xFFFF
+#define HIGH_FREQUENCY_RUMBLE 0x0
+#define DURATION_MS 200
 
 int main(void)
 {
@@ -30,14 +30,18 @@ int main(void)
 		}
 	}
 
-	SDL_GameControllerRumble(gamePad1, 
-			LOW_FREQUENCY_RUMBLE, 
-			HIGH_FREQUENCY_RUMBLE, 
-			DURATION_MS);
+	for(int i = 0; i < 3; ++i) {
+		SDL_GameControllerRumble(gamePad1, 
+				LOW_FREQUENCY_RUMBLE, 
+				HIGH_FREQUENCY_RUMBLE, 
+				DURATION_MS);
 
-	SDL_Delay(DURATION_MS*2);
+		SDL_Delay(DURATION_MS);
 
-	SDL_GameControllerRumble(gamePad1, 0x0, 0x0, 50);
+		SDL_GameControllerRumble(gamePad1, 0x0, 0x0, DURATION_MS);
+
+		SDL_Delay(DURATION_MS);
+	}
 
 	SDL_Delay(100);
 
