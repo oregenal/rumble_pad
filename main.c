@@ -5,6 +5,7 @@
 #define LOW_FREQUENCY_RUMBLE 0xFFFF
 #define HIGH_FREQUENCY_RUMBLE 0x0
 #define DURATION_MS 200
+#define RUMBLE_TIMES 3
 
 int main(void)
 {
@@ -30,7 +31,7 @@ int main(void)
 		}
 	}
 
-	for(int i = 0; i < 3; ++i) {
+	for(int i = 0; i < RUMBLE_TIMES; ++i) {
 		SDL_GameControllerRumble(gamePad1, 
 				LOW_FREQUENCY_RUMBLE, 
 				HIGH_FREQUENCY_RUMBLE, 
