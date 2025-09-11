@@ -6,6 +6,7 @@
 #define HIGH_FREQUENCY_RUMBLE 0x0
 #define DURATION_MS 200
 #define RUMBLE_TIMES 3
+#define DUALSHOCK "PS4 Controller"
 
 int main(void)
 {
@@ -24,7 +25,10 @@ int main(void)
 	} else {
 		gamePad1 = SDL_GameControllerOpen(0);
 		const char *gamePad1_name = SDL_GameControllerName(gamePad1);
-		printf("%s connected.\n", gamePad1_name);
+		if(!strcmp(gamePad1_name, DUALSHOCK))
+			printf("DualShock connected.\n");
+		else
+			printf("%s connected.\n", gamePad1_name);
 		if(!SDL_GameControllerHasRumble(gamePad1)) {
 			fprintf(stderr, "%s has no rumble.\n", gamePad1_name);
 			return EXIT_FAILURE;
