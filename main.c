@@ -8,7 +8,10 @@
 #define RUMBLE_TIMES 3
 #define DUALSHOCK "PS4 Controller"
 
-int main(void)
+Uint16 low = LOW_FREQUENCY_RUMBLE, high = HIGH_FREQUENCY_RUMBLE;
+Uint32 duration = DURATION_MS, times = RUMBLE_TIMES;
+
+int main(int argc, char **argv)
 {
 	if(SDL_Init(SDL_INIT_JOYSTICK) < 0) {
 		fprintf(stderr, "SDL Error: %s\n", SDL_GetError());
@@ -35,17 +38,22 @@ int main(void)
 		}
 	}
 
-	for(int i = 0; i < RUMBLE_TIMES; ++i) {
-		SDL_GameControllerRumble(gamePad1, 
-				LOW_FREQUENCY_RUMBLE, 
-				HIGH_FREQUENCY_RUMBLE, 
-				DURATION_MS);
+	if (5 == argc) {
+		sscanf(argv[1], "%hx", &low);
+		sscanf(argv[2], "%hx", &high);
+		sscanf(argv[3], "%u", &duration);
+		sscanf(argv[4], "%u", &times);
+	}
 
-		SDL_Delay(DURATION_MS);
+	for(Uint32 i = 0; i < times; ++i) {
+		SDL_GameControllerRumble(gamePad1, low, high, duration);
 
-		SDL_GameControllerRumble(gamePad1, 0x0, 0x0, DURATION_MS);
+		SDL_Delay(duration);
 
-		SDL_Delay(DURATION_MS);
+		SDL_GameControllerRumble(gamePad1, 0x0, 0x0, 
+				duration <= 200 ? duration : 200);
+
+		SDL_Delay(duration <= 200 ? duration : 200);
 	}
 
 	SDL_Delay(100);
