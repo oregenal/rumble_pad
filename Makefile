@@ -7,7 +7,7 @@ BIN=rumble_pad
 $(BIN):$(CSRS)
 	$(CC) $(CFLAGS) -o $@ $^ $(CLIBS)
 
-PHONY.:clean
+.PHONY:clean
 
 clean:
 	rm -rf $(BIN)
