@@ -11,22 +11,24 @@
 Uint16 low = LOW_FREQUENCY_RUMBLE, high = HIGH_FREQUENCY_RUMBLE;
 Uint32 duration = DURATION_MS, times = RUMBLE_TIMES;
 
+void error_exit(const char *msg)
+{
+	fprintf(stderr, msg);
+	SDL_Quit();
+	exit(EXIT_FAILURE);
+}
+
 int main(int argc, char **argv)
 {
-	if(SDL_InitSubSystem(SDL_INIT_GAMECONTROLLER) < 0) {
-		fprintf(stderr, "SDL Error: %s\n", SDL_GetError());
-		SDL_Quit();
-		return EXIT_FAILURE;
-	}
+	if(SDL_InitSubSystem(SDL_INIT_GAMECONTROLLER) < 0)
+		error_exit(SDL_GetError());
 
 	SDL_GameController *gamePad = NULL;
 
 	int num_of_joys = SDL_NumJoysticks();
 
 	if(num_of_joys < 1) {
-		fprintf(stderr, "No gamepad connected\n");
-		SDL_Quit();
-		return EXIT_FAILURE;
+		error_exit("No gamepad connected\n");
 	} else {
 		for (int i = 0; i < num_of_joys; ++i) {
 			gamePad = SDL_GameControllerOpen(i);
@@ -38,11 +40,8 @@ int main(int argc, char **argv)
 		}
 	}
 
-	if (!gamePad) {
-		fprintf(stderr, "No rumble gamepad connected\n");
-		SDL_Quit();
-		return EXIT_FAILURE;
-	}
+	if (!gamePad)
+		error_exit("No rumble gamepad connected\n");
 
 	if (5 == argc) {
 		sscanf(argv[1], "%hx", &low);
