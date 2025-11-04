@@ -15,6 +15,7 @@ int main(int argc, char **argv)
 {
 	if(SDL_InitSubSystem(SDL_INIT_GAMECONTROLLER) < 0) {
 		fprintf(stderr, "SDL Error: %s\n", SDL_GetError());
+		SDL_Quit();
 		return EXIT_FAILURE;
 	}
 
@@ -24,18 +25,23 @@ int main(int argc, char **argv)
 
 	if(num_of_joys < 1) {
 		fprintf(stderr, "No gamepad connected\n");
+		SDL_Quit();
 		return EXIT_FAILURE;
 	} else {
-		gamePad = SDL_GameControllerOpen(0);
-		const char *gamePad_name = SDL_GameControllerName(gamePad);
-		if(!strcmp(gamePad_name, DUALSHOCK))
-			printf("DualShock connected.\n");
-		else
-			printf("%s connected.\n", gamePad_name);
-		if(!SDL_GameControllerHasRumble(gamePad)) {
-			fprintf(stderr, "%s has no rumble.\n", gamePad_name);
-			return EXIT_FAILURE;
+		for (int i = 0; i < num_of_joys; ++i) {
+			gamePad = SDL_GameControllerOpen(i);
+			if(SDL_GameControllerHasRumble(gamePad)) {
+				break;
+			} else {
+				gamePad = NULL;
+			}
 		}
+	}
+
+	if (!gamePad) {
+		fprintf(stderr, "No rumble gamepad connected\n");
+		SDL_Quit();
+		return EXIT_FAILURE;
 	}
 
 	if (5 == argc) {
@@ -56,9 +62,6 @@ int main(int argc, char **argv)
 		SDL_Delay(duration <= 200 ? duration : 200);
 	}
 
-	SDL_Delay(100);
-
 	SDL_Quit();
-
 	return 0;
 }
