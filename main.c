@@ -13,7 +13,7 @@ Uint32 duration = DURATION_MS, times = RUMBLE_TIMES;
 
 int main(int argc, char **argv)
 {
-	if(SDL_Init(SDL_INIT_JOYSTICK) < 0) {
+	if(SDL_InitSubSystem(SDL_INIT_GAMECONTROLLER) < 0) {
 		fprintf(stderr, "SDL Error: %s\n", SDL_GetError());
 		return EXIT_FAILURE;
 	}
@@ -57,6 +57,8 @@ int main(int argc, char **argv)
 	}
 
 	SDL_Delay(100);
+
+	SDL_Quit();
 
 	return 0;
 }
