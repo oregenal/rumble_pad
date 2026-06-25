@@ -18,6 +18,11 @@ void error_exit(const char *msg)
 	exit(EXIT_FAILURE);
 }
 
+void if_error(int err, const char *msg)
+{
+	if (err == -1) error_exit(msg);
+}
+
 int main(int argc, char **argv)
 {
 	if(SDL_InitSubSystem(SDL_INIT_GAMECONTROLLER) < 0)
@@ -51,12 +56,14 @@ int main(int argc, char **argv)
 	}
 
 	for(Uint32 i = 0; i < times; ++i) {
-		SDL_GameControllerRumble(gamePad, low, high, duration);
+		if_error(SDL_GameControllerRumble(gamePad, low, high, duration),
+				SDL_GetError());
 
 		SDL_Delay(duration);
 
-		SDL_GameControllerRumble(gamePad, 0x0, 0x0, 
-				duration <= 200 ? duration : 200);
+		if_error(SDL_GameControllerRumble(gamePad, 0x0, 0x0, 
+					duration <= 200 ? duration : 200),
+				SDL_GetError());
 
 		SDL_Delay(duration <= 200 ? duration : 200);
 	}
